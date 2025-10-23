@@ -27,8 +27,23 @@ public class Caixa {
 	private long id;
 	
 	private int altura;
+
 	private int largura;
+
 	private int comprimento;
+
 	private String material;
+
+	private double limitePeso;
+
+
+	public Caixa(CadastroCaixa cadastroCaixa){
+		this.id = cadastroCaixa.id();
+		this.largura = cadastroCaixa.largura();
+		this.altura = cadastroCaixa.altura();
+		this.comprimento = cadastroCaixa.comprimento();
+		this.material = cadastroCaixa.material();
+		this.limitePeso = cadastroCaixa.limitePeso();
+	}
 
 }

@@ -30,13 +30,26 @@ public class Caminhao {
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(name = "caminhao_id")
 	private Long id;
+
 	private String modelo;
+
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "marca_id", referencedColumnName = "marca_id")
 	private Marca marca;
+
 	private String placa;
+
 	private double cargaMaxima;
-	private int ano;
+
+	private  Integer ano;
+
+	private double altura;
+
+	private double comprimento;
+
+	private double largura;
+
+	private double fatorCubagem = 300.00;
 
 	public Caminhao(CadastroCaminhao dados, Marca marca) {
 		this.modelo = dados.modelo();

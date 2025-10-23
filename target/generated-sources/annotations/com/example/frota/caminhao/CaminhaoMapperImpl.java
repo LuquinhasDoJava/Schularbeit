@@ -6,8 +6,8 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2025-10-03T22:21:35-0300",
-    comments = "version: 1.5.5.Final, compiler: Eclipse JDT (IDE) 3.41.0.v20250213-1140, environment: Java 21.0.6 (Eclipse Adoptium)"
+    date = "2025-10-23T17:24:14-0300",
+    comments = "version: 1.5.5.Final, compiler: javac, environment: Java 21.0.7 (Oracle Corporation)"
 )
 @Component
 public class CaminhaoMapperImpl implements CaminhaoMapper {
@@ -46,14 +46,12 @@ public class CaminhaoMapperImpl implements CaminhaoMapper {
         Caminhao caminhao = new Caminhao();
 
         caminhao.setMarca( idToMarca( dto.marcaId() ) );
-        if ( dto.ano() != null ) {
-            caminhao.setAno( dto.ano() );
-        }
+        caminhao.setModelo( dto.modelo() );
+        caminhao.setPlaca( dto.placa() );
         if ( dto.cargaMaxima() != null ) {
             caminhao.setCargaMaxima( dto.cargaMaxima() );
         }
-        caminhao.setModelo( dto.modelo() );
-        caminhao.setPlaca( dto.placa() );
+        caminhao.setAno( dto.ano() );
 
         return caminhao;
     }
@@ -65,14 +63,12 @@ public class CaminhaoMapperImpl implements CaminhaoMapper {
         }
 
         caminhao.setMarca( idToMarca( dto.marcaId() ) );
-        if ( dto.ano() != null ) {
-            caminhao.setAno( dto.ano() );
-        }
+        caminhao.setModelo( dto.modelo() );
+        caminhao.setPlaca( dto.placa() );
         if ( dto.cargaMaxima() != null ) {
             caminhao.setCargaMaxima( dto.cargaMaxima() );
         }
-        caminhao.setModelo( dto.modelo() );
-        caminhao.setPlaca( dto.placa() );
+        caminhao.setAno( dto.ano() );
     }
 
     private Long caminhaoMarcaId(Caminhao caminhao) {
