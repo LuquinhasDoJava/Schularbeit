@@ -52,6 +52,9 @@ public class Caminhao {
 	@Column(name = "volume", nullable = false)
     private double volume;
 
+    @Column(name = "fator_cubagem", nullable = false)
+    private double fatorCubagem = 300.0; // kg/m³ padrão
+
     @Transient
     public double getVolume(){
         return altura * comprimento * largura;

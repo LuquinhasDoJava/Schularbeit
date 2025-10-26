@@ -27,7 +27,7 @@ public interface CaminhaoMapper {
     @Mapping(target = "marca", source = "marcaId", qualifiedByName = "idToMarca")
     void updateEntityFromDto(AtualizacaoCaminhao dto, @MappingTarget Caminhao caminhao);
     
-    // Método para converter marcaId em objeto Marca
+    // Metodo para converter marcaId em objeto Marca
     @Named("idToMarca")
     default Marca idToMarca(Long marcaId) {
         if (marcaId == null) return null;

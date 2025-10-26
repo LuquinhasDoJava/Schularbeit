@@ -1,18 +1,16 @@
 package com.example.frota.dto;
 
-import com.example.frota.entity.Marca;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 
 public record CadastroCaminhao(
-        @NotBlank Long id,
         @NotBlank String modelo,
-        @NotBlank Marca marca,
+        @NotNull Long marcaId,
         @NotBlank String placa,
-        @NotBlank double cargaMaxima,
-        @NotBlank int ano,
-        @NotBlank double altura,
-        @NotBlank double comprimento,
-        @NotBlank double largura,
-        double volume
-        ) {}
-
+        @Positive double cargaMaxima,
+        @Positive int ano,
+        @Positive double altura,
+        @Positive double comprimento,
+        @Positive double largura
+) {}

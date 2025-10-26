@@ -23,7 +23,7 @@ public class Encomenda {
     private Caixa caixa;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "caminha_id", nullable = false)
+    @JoinColumn(name = "caminhao_id", nullable = false) // "caminhao_id" não "caminha_id"
     private Caminhao caminhao;
 
     @Column(nullable = false)
@@ -33,10 +33,21 @@ public class Encomenda {
     private double peso;
 
     @Column(nullable = false)
+    private double distanciaKm;
+
+    @Column(nullable = false)
+    private double pesoCobranca;
+
+    @Column(nullable = false)
     private double preco;
 
     @Transient
     public double getPesoCubado() {
-        return caixa.getVolume()/peso;
+        return caixa.getVolume() * caminhao.getFatorCubagem();
+    }
+
+    @Transient
+    public double getPesoCobranca() {
+        return Math.max(peso, getPesoCubado());
     }
 }

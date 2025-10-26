@@ -37,9 +37,6 @@ public class Caixa {
     @Column(nullable = false)
 	private double limitePeso;
 
-    @Column(nullable = false)
-    private double volume;
-
     @Transient
     public double getVolume() {
         return altura * comprimento * largura;
