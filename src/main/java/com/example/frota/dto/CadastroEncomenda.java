@@ -9,6 +9,10 @@ public record CadastroEncomenda(
         @NotNull Long caminhaoId,
         @NotNull Long encomendaId,
         @Positive double pesoReal,
-        @Positive double distanciaKm
+        @Positive double distanciaKm,
+        @Positive double altura,
+        @Positive double largura,
+        @Positive double comprimento
         ) {}
+
 
