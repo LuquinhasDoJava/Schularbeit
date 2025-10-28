@@ -7,7 +7,8 @@ import jakarta.validation.constraints.Positive;
 public record CadastroEncomenda(
         @NotNull Long caixaId,
         @NotNull Long caminhaoId,
-        @NotNull Long produtoId,
+        @NotNull Long encomendaId,
         @Positive double pesoReal,
         @Positive double distanciaKm
         ) {}
+
