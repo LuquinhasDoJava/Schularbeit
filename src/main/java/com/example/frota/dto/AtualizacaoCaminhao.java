@@ -4,6 +4,7 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Positive;
 
 public record AtualizacaoCaminhao(
+        Long id,
         String modelo,
         Long marcaId,
         String placa,

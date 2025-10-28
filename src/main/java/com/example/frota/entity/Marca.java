@@ -35,4 +35,16 @@ public class Marca {
 	@Column(nullable = false, length = 20)
     private String pais;
 
+    public void atualizarInformacoes(@Valid AtualizacaoMarca dados) {
+        if (dados.nome() != null) {
+            this.nome = dados.nome();
+            this.pais = dados.pais();
+        }
+    }
+
+    public Marca(CadastroMarca dados){
+        this.id = dados.id();
+        this.pais = dados.pais();
+        this.nome = dados.nome();
+    }
 }

@@ -6,24 +6,25 @@ import lombok.*;
 
 @Entity
 @Table(name = "encomenda")
+@NoArgsConstructor
 @Getter
 @Setter
-@NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(of = "id")
 public class Encomenda {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "encomenda_id")
+    @Column(name = "encomenda_id", nullable = false)
     private long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "caixa_id", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(nullable = false)
     private Caixa caixa;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "caminhao_id", nullable = false) // "caminhao_id" não "caminha_id"
+
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(nullable = false)
     private Caminhao caminhao;
 
     @Column(nullable = false)
@@ -40,6 +41,10 @@ public class Encomenda {
 
     @Column(nullable = false)
     private double preco;
+
+    @OneToOne
+    @JoinColumn(name = "produto_id", nullable = false)
+    private Produto produto;
 
     @Transient
     public double getPesoCubado() {
