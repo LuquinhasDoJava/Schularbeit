@@ -42,7 +42,6 @@ public class MarcaController {
 		marcaService.apagarPorId(id);
 		return "redirect:marca";
 	}
-	// Método para gravar/atualizar o formulário 
 	@PostMapping
 	@Transactional
 	public String cadastrar (@Valid CadastroMarca dados) {

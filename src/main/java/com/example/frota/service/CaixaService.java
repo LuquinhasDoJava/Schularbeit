@@ -1,16 +1,13 @@
 package com.example.frota.service;
 
-import com.example.frota.entity.Caixa;
 import com.example.frota.repository.CaixaRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.List;
 
 public class CaixaService {
 
+    @Autowired
     private CaixaRepository repository;
 
-    public List<Caixa> procurarPorCaixa(double altura, double largura, double comprimento){
-        return repository.findCaixaByAlturaLarguraComprimento(altura, largura, comprimento);
-    }
 
 }
