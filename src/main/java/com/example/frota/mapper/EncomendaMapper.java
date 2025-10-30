@@ -1,5 +1,6 @@
 package com.example.frota.mapper;
 
+import com.example.frota.dto.AtualizacaoEncomenda;
 import com.example.frota.dto.CadastroEncomenda;
 import com.example.frota.entity.Encomenda;
 import com.example.frota.entity.Caixa;
@@ -36,8 +37,13 @@ public interface EncomendaMapper {
     @Mapping(target = "produto", source = "produtoId", qualifiedByName = "idToProduto")
     @Mapping(target = "pesoReal", source = "pesoReal")
     @Mapping(target = "distanciaKm", source = "distanciaKm")
-    void updateEntityFromDto(CadastroEncomenda dto, @MappingTarget Encomenda encomenda);
-
+    void updateEntityFromDto(AtualizacaoEncomenda dto, @MappingTarget Encomenda encomenda);
+    
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "produto", source = "produtoId", qualifiedByName = "idToProduto")
+    @Mapping(target = "caixa", source = "caixaId", qualifiedByName = "idToCaixa")
+    Encomenda toEntityFromAtualizacao(AtualizacaoEncomenda dto);
+    
     // Métodos para converter IDs em entidades
     @Named("idToCaixa")
     default Caixa idToCaixa(Long caixaId) {
