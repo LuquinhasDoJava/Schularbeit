@@ -2,7 +2,7 @@ package com.example.frota.controller;
 
 import com.example.frota.dto.AtualizacaoCaixa;
 import com.example.frota.dto.CadastroCaixa;
-import com.example.frota.service.CaixaService;
+import com.example.frota.service.CaixaService; 
 import com.example.frota.entity.Caixa;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
