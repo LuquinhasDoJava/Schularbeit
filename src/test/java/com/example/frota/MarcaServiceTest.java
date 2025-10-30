@@ -179,7 +179,7 @@ class MarcaServiceTest {
 
     @Test
     void salvarMarca(){
-        Marca marca = new Marca("Volvo","Suecia");
+        Marca marca = new Marca("Ford","EUA");
 
         marcaService.salvar(marca);
     }
