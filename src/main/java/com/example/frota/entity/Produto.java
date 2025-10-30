@@ -41,9 +41,15 @@ public class Produto {
     }
 
     public void atualizarInformacoes(@Valid AtualizacaoProduto dados){
-        if(dados.altura() > 0)this.altura = altura;
-        if(dados.largura() > 0) this.largura = largura;
-        if(dados.comprimento() > 0) this.comprimento = comprimento;
-        if(dados.peso() > 0) this.peso = peso;
+    	if (dados.peso() > 0)
+			this.peso = dados.peso();
+		if (dados.altura() > 0)
+			this.altura =dados.altura();
+		if (dados.largura() > 0)
+			this.largura = dados.largura();
+		if (dados.comprimento() > 0)
+			this.comprimento = dados.comprimento();
     }
 }
+}
+
