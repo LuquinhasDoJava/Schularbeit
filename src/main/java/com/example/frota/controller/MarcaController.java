@@ -20,38 +20,38 @@ import jakarta.validation.Valid;
 @RequestMapping("/marca")
 public class MarcaController {
 
-	@Autowired
-	private MarcaService marcaService;
+    @Autowired
+    private MarcaService marcaService;
 
-	@GetMapping              
-	public String carregaPaginaListagem(Model model){ 
-		model.addAttribute("lista",marcaService.procurarTodos() );
-		return "marca/listagem";              
-	} 
-	@GetMapping ("/formulario")             
-	public String carregaPaginaFormulario(Long id, Model model) {
-		if(id != null) {
-			var marca =marcaService.procurarPorId(id);
-			model.addAttribute("marca", marca);
-		}
-		return "marca/formulario";     
-	}
-	@DeleteMapping
-	@Transactional
-	public String excluir (Long id) {
-		marcaService.apagarPorId(id);
-		return "redirect:marca";
-	}
-	@PostMapping
-	@Transactional
-	public String cadastrar (@Valid CadastroMarca dados) {
-		marcaService.salvar(new Marca(dados));
-		return "redirect:marca";
-	}
-	@PutMapping
-	@Transactional
-	public String atualizar (AtualizacaoMarca dados) {
-		marcaService.atualizarMarca(dados);
-		return "redirect:marca";
-	}
+    @GetMapping
+    public String carregaPaginaListagem(Model model){
+        model.addAttribute("lista",marcaService.procurarTodos() );
+        return "marca/listagem";
+    }
+    @GetMapping ("/formulario")
+    public String carregaPaginaFormulario(Long id, Model model) {
+        if(id != null) {
+            var marca =marcaService.procurarPorId(id);
+            model.addAttribute("marca", marca);
+        }
+        return "marca/formulario";
+    }
+    @DeleteMapping
+    @Transactional
+    public String excluir (Long id) {
+        marcaService.apagarPorId(id);
+        return "redirect:marca";
+    }
+    @PostMapping
+    @Transactional
+    public String cadastrar (@Valid CadastroMarca dados) {
+        marcaService.salvar(new Marca(dados));
+        return "redirect:marca";
+    }
+    @PutMapping
+    @Transactional
+    public String atualizar (AtualizacaoMarca dados) {
+        marcaService.atualizarMarca(dados);
+        return "redirect:marca";
+    }
 }

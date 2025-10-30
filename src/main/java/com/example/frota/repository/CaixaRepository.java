@@ -1,24 +1,35 @@
 package com.example.frota.repository;
 
+import com.example.frota.entity.Caixa;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
-import com.example.frota.entity.Caixa;
+import java.util.List;
 
 @Repository
-@Transactional
-public interface CaixaRepository extends JpaRepository<Caixa, Long>{
-	
-	@Query(value = "SELECT TOP 1 c.* FROM caixa c "
-				 + "WHERE c.comprimento >= ?1 "
-				 + "AND c.largura >= ?2 "
-				 + "AND c.altura >= ?3 "
-				 + "AND c.limitePeso >= ?4"
-				 + "ORDER BY v"
-				 + "c.volume ASC")
-	public Caixa findCaixaMaisProxima(double comprimento, double largura, double altura, double peso);
+public interface CaixaRepository extends JpaRepository<Caixa, Long> {
 
-  
+    @Query("SELECT c FROM Caixa c WHERE " +
+            "c.comprimento >= :comprimentoProduto AND " +
+            "c.largura >= :larguraProduto AND " +
+            "c.altura >= :alturaProduto AND " +
+            "c.limitePeso >= :pesoProduto " +
+            "ORDER BY (c.altura * c.largura * c.comprimento) ASC")
+    List<Caixa> findCaixasCompativeis(
+            @Param("comprimentoProduto") double comprimentoProduto,
+            @Param("larguraProduto") double larguraProduto,
+            @Param("alturaProduto") double alturaProduto,
+            @Param("pesoProduto") double pesoProduto
+    );
+
+    // Metodo para encontrar a caixa mais próxima (primeira da lista ordenada)
+    default Caixa findCaixaMaisProxima(double comprimentoProduto, double larguraProduto,
+                                       double alturaProduto, double pesoProduto) {
+        List<Caixa> caixasCompativeis = findCaixasCompativeis(
+                comprimentoProduto, larguraProduto, alturaProduto, pesoProduto
+        );
+        return caixasCompativeis.isEmpty() ? null : caixasCompativeis.get(0);
+    }
 }

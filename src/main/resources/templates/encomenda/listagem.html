@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragmentos/head :: head('Listagem Encomenda')}"></head>
+<body>
+<header th:replace="~{fragmentos/header :: header(activePage='Encomenda')}"></header>
+
+<div class="container-fluid" style="max-width: 900px; margin: 0 auto;">
+    <h2 class="text-center">Lista de Encomendas</h2>
+
+    <div th:if="${message != null}"
+         class="alert alert-success alert-dismissible fade show text-center"
+         role="alert">
+        [[${message}]]
+        <button type="button" class="close btn-sm" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+
+    <a href="/encomenda/formulario" class="btn btn-success mb-3">Nova Encomenda</a>
+
+    <div th:if="${listaEncomendas.size() > 0}">
+        <table class="table table-hover table-responsive-xl">
+            <thead class="thead-light">
+                <tr>
+                    <th scope="col">Descrição</th>
+                    <th scope="col">Peso (kg)</th>
+                    <th scope="col">Valor (R$)</th>
+                    <th scope="col">Produto</th>
+                    <th scope="col">Caminhão</th>
+                    <th scope="col">Data de Entrega</th>
+                    <th scope="col">Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="encomenda : ${listaEncomendas}">
+                    <td th:text="${encomenda.descricao}"></td>
+                    <td th:text="${#numbers.formatDecimal(encomenda.peso, 1, 2)}"></td>
+                    <td th:text="${#numbers.formatDecimal(encomenda.valor, 1, 2)}"></td>
+                    <td th:text="${encomenda.produto.nome}"></td>
+                    <td th:text="${encomenda.caminhao.modelo}"></td>
+                    <td th:text="${#temporals.format(encomenda.dataEntrega, 'dd/MM/yyyy')}"></td>
+                    <td>
+                        <a th:href="@{'/encomenda/formulario/' + ${encomenda.id}}"
+                           title="Editar Encomenda"
+                           class="fa-regular fa-pen-to-square icon-dark"></a>
+                        &nbsp;
+                        <a th:href="@{'/encomenda/delete/' + ${encomenda.id}}"
+                           title="Excluir Encomenda"
+                           class="fa-regular fa-trash-can icon-dark btn-delete"></a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div th:replace="fragmentos/footer :: footer"></div>
+</body>
+</html>

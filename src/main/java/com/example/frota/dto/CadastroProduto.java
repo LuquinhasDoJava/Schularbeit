@@ -1,10 +1,9 @@
 package com.example.frota.dto;
 
-import jakarta.validation.constraints.NotNull;
+
 import jakarta.validation.constraints.Positive;
 
-public record AtualizacaoProduto(
-        @NotNull Long id,
+public record CadastroProduto(
         @Positive double peso,
         @Positive double altura,
         @Positive double largura,

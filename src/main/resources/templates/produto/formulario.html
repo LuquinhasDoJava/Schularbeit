@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragmentos/head :: head('Manter Produto')}"></head>
+<body>
+<header th:replace="~{fragmentos/header :: header(activePage='Produto')}"></header>
+
+<div class="container-fluid" style="max-width: 900px; margin: 0 auto;">
+    <h2 class="text-center"
+        th:text="(${produto != null} ? 'Editar Produto' : 'Novo Produto')"></h2>
+
+    <div th:if="${message != null}"
+         class="alert alert-success alert-dismissible fade show text-center"
+         role="alert">
+        [[${message}]]
+        <button type="button" class="close btn-sm" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+
+    <form th:action="@{/produto/salvar}" th:object="${produto}" method="post">
+        <input type="hidden" th:field="*{id}" />
+
+        <div class="form-group mt-3">
+            <label for="nome">Nome:</label>
+            <input class="form-control" type="text" th:field="*{nome}"
+                   th:classappend="${#fields.hasErrors('nome')} ? 'is-invalid'">
+            <div th:errors="*{nome}" class="invalid-feedback"></div>
+        </div>
+
+        <div class="form-group">
+            <label for="descricao">Descrição:</label>
+            <textarea class="form-control" th:field="*{descricao}" rows="3"
+                      th:classappend="${#fields.hasErrors('descricao')} ? 'is-invalid'"></textarea>
+            <div th:errors="*{descricao}" class="invalid-feedback"></div>
+        </div>
+
+        <div class="form-group">
+            <label for="peso">Peso (kg):</label>
+            <input class="form-control" type="number" step="0.01" th:field="*{peso}"
+                   th:classappend="${#fields.hasErrors('peso')} ? 'is-invalid'">
+            <div th:errors="*{peso}" class="invalid-feedback"></div>
+        </div>
+
+        <div class="form-group">
+            <label for="valor">Valor (R$):</label>
+            <input class="form-control" type="number" step="0.01" th:field="*{valor}"
+                   th:classappend="${#fields.hasErrors('valor')} ? 'is-invalid'">
+            <div th:errors="*{valor}" class="invalid-feedback"></div>
+        </div>
+
+        <div class="form-group">
+            <label for="volume">Volume (m³):</label>
+            <input class="form-control" type="number" step="0.001" th:field="*{volume}"
+                   th:classappend="${#fields.hasErrors('volume')} ? 'is-invalid'">
+            <div th:errors="*{volume}" class="invalid-feedback"></div>
+        </div>
+
+        <button type="submit" class="btn btn-primary">
+            <span th:text="${produto.id != null} ? 'Atualizar' : 'Cadastrar'"></span>
+        </button>
+        <a th:href="@{/produtos}" class="btn btn-secondary">Cancelar</a>
+    </form>
+</div>
+
+<div th:replace="~{fragmentos/footer :: footer}"></div>
+</body>
+</html>

@@ -109,7 +109,7 @@ INSERT INTO encomenda (encomenda_id, caixa_id, caminhao_id, produto_id, peso_rea
 
 -- Encomenda 12: Caixa grande (peso cubado maior que real)
 (12, 6, 12, 12, 18.6, 320.0);
- 
+
 SELECT *
 FROM caixa;
 

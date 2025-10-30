@@ -57,6 +57,6 @@ public class Caminhao {
 
     @Transient
     public double getVolume(){
-        return altura * comprimento * largura;
+        return altura * largura * comprimento;
     }
 }

@@ -10,6 +10,7 @@ import lombok.*;
 @Table(name = "marca")
 @Getter
 @Setter
+@ToString
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(of = "id")
@@ -26,7 +27,6 @@ public class Marca {
     @Column(nullable = false, length = 20)
     private String pais;
 
-    // ⚠️ CORRIJA este metodo - verifique nulls!
     public void atualizarInformacoes(@Valid AtualizacaoMarca dados) {
         if (dados.nome() != null) {
             this.nome = dados.nome();
@@ -36,13 +36,11 @@ public class Marca {
         }
     }
 
-    // ⚠️ MELHORE o construtor
     public Marca(CadastroMarca dados) {
         this.nome = dados.nome();
         this.pais = dados.pais();
     }
 
-    // Adicione este construtor
     public Marca(String nome, String pais) {
         this.nome = nome;
         this.pais = pais;

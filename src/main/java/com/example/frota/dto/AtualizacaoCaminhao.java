@@ -1,10 +1,11 @@
 package com.example.frota.dto;
 
 import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 
 public record AtualizacaoCaminhao(
-        Long id,
+        @NotNull Long id,
         String modelo,
         Long marcaId,
         String placa,
@@ -17,5 +18,6 @@ public record AtualizacaoCaminhao(
         @Positive(message = "Comprimento deve ser positiva")
         Double comprimento,
         @Positive(message = "Largura deve ser positiva")
-        Double largura
+        Double largura,
+        @Positive Double fatorCubagem
 ) {}

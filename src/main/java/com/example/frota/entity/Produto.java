@@ -1,6 +1,9 @@
 package com.example.frota.entity;
 
+import com.example.frota.dto.AtualizacaoProduto;
+import com.example.frota.dto.CadastroProduto;
 import jakarta.persistence.*;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -29,4 +32,18 @@ public class Produto {
 
     @Column(nullable = false)
     private double comprimento;
+
+    public Produto(CadastroProduto dado){
+        this.peso = dado.peso();
+        this.altura = dado.altura();
+        this.largura = dado.largura();
+        this.comprimento = dado.comprimento();
+    }
+
+    public void atualizarInformacoes(@Valid AtualizacaoProduto dados){
+        if(dados.altura() > 0)this.altura = altura;
+        if(dados.largura() > 0) this.largura = largura;
+        if(dados.comprimento() > 0) this.comprimento = comprimento;
+        if(dados.peso() > 0) this.peso = peso;
+    }
 }

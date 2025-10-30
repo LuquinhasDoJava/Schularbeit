@@ -22,8 +22,8 @@ public interface CaminhaoMapper {
     @Mapping(target = "marca", source = "marcaId", qualifiedByName = "idToMarca")
     Caminhao toEntityFromAtualizacao(AtualizacaoCaminhao dto);
     
-    // Atualiza Entity existente com dados do DTO
-    @Mapping(target = "id", ignore = true) // Não atualiza ID
+
+    @Mapping(target = "id", ignore = true)
     @Mapping(target = "marca", source = "marcaId", qualifiedByName = "idToMarca")
     void updateEntityFromDto(AtualizacaoCaminhao dto, @MappingTarget Caminhao caminhao);
     

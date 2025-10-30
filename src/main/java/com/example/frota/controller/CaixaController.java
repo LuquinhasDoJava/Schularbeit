@@ -2,7 +2,7 @@ package com.example.frota.controller;
 
 import com.example.frota.dto.AtualizacaoCaixa;
 import com.example.frota.dto.CadastroCaixa;
-import com.example.frota.service.CaixaService; 
+import com.example.frota.service.CaixaService;
 import com.example.frota.entity.Caixa;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -20,38 +20,38 @@ import jakarta.validation.Valid;
 @RequestMapping("/caixa")
 public class CaixaController {
 
-	@Autowired
-	private CaixaService caixaService;
+    @Autowired
+    private CaixaService caixaService;
 
-	@GetMapping              
-	public String carregaPaginaListagem(Model model){ 
-		model.addAttribute("lista",caixaService.procurarTodos() );
-		return "caixa/listagem";              
-	} 
-	@GetMapping ("/formulario")             
-	public String carregaPaginaFormulario(Long id, Model model) {
-		if(id != null) {
-			var caixa = caixaService.procurarPorId(id);
-			model.addAttribute("caixa", caixa);
-		}
-		return "caixa/formulario";     
-	}
-	@DeleteMapping
-	@Transactional
-	public String excluir (Long id) {
-		caixaService.apagarPorId(id);
-		return "redirect:caixa";
-	}
-	@PostMapping
-	@Transactional
-	public String cadastrar (@Valid CadastroCaixa dados) {
-		caixaService.salvar(new Caixa(dados));
-		return "redirect:marca";
-	}
-	@PutMapping
-	@Transactional
-	public String atualizar (AtualizacaoCaixa dados) {
-		caixaService.atualizarCaixa(dados);
-		return "redirect:caixa";
-	}
+    @GetMapping
+    public String carregaPaginaListagem(Model model){
+        model.addAttribute("lista",caixaService.procurarTodos() );
+        return "caixa/listagem";
+    }
+    @GetMapping ("/formulario")
+    public String carregaPaginaFormulario(Long id, Model model) {
+        if(id != null) {
+            var caixa = caixaService.procurarPorId(id);
+            model.addAttribute("caixa", caixa);
+        }
+        return "caixa/formulario";
+    }
+    @DeleteMapping
+    @Transactional
+    public String excluir (Long id) {
+        caixaService.apagarPorId(id);
+        return "redirect:caixa";
+    }
+    @PostMapping
+    @Transactional
+    public String cadastrar (@Valid CadastroCaixa dados) {
+        caixaService.salvar(new Caixa(dados));
+        return "redirect:marca";
+    }
+    @PutMapping
+    @Transactional
+    public String atualizar (AtualizacaoCaixa dados) {
+        caixaService.atualizarCaixa(dados);
+        return "redirect:caixa";
+    }
 }

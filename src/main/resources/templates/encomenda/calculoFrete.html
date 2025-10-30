@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragmentos/head :: head('Cálculo de Frete')}"></head>
+<body>
+<header th:replace="~{fragmentos/header :: header(activePage='Frete')}"></header>
+
+<div class="container-fluid" style="max-width: 900px; margin: 0 auto;">
+    <h2 class="text-center">Cálculo de Frete</h2>
+
+    <div th:if="${message != null}"
+         class="alert alert-success alert-dismissible fade show text-center"
+         role="alert">
+        [[${message}]]
+        <button type="button" class="close btn-sm" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+
+    <form th:action="@{/frete/calcular}" th:object="${frete}" method="post">
+        <div class="form-group mt-3">
+            <label for="encomendaId">Encomenda:</label>
+            <select class="form-control" th:field="*{encomendaId}"
+                    th:classappend="${#fields.hasErrors('encomendaId')} ? 'is-invalid'">
+                <option value="">-Selecione uma encomenda-</option>
+                <option th:each="enc : ${encomendas}"
+                        th:value="${enc.id}"
+                        th:text="${enc.descricao + ' (' + enc.peso + 'kg)'}"></option>
+            </select>
+            <div th:errors="*{encomendaId}" class="invalid-feedback"></div>
+        </div>
+
+        <div class="form-group">
+            <label for="caminhaoId">Caminhão:</label>
+            <select class="form-control" th:field="*{caminhaoId}"
+                    th:classappend="${#fields.hasErrors('caminhaoId')} ? 'is-invalid'">
+                <option value="">-Selecione um caminhão-</option>
+                <option th:each="cam : ${caminhoes}"
+                        th:value="${cam.id}"
+                        th:text="${cam.modelo + ' - ' + cam.placa}"></option>
+            </select>
+            <div th:errors="*{caminhaoId}" class="invalid-feedback"></div>
+        </div>
+
+        <div class="form-group">
+            <label for="distanciaKm">Distância (km):</label>
+            <input class="form-control" type="number" step="0.1" th:field="*{distanciaKm}"
+                   placeholder="Informe a distância entre origem e destino"
+                   th:classappend="${#fields.hasErrors('distanciaKm')} ? 'is-invalid'">
+            <div th:errors="*{distanciaKm}" class="invalid-feedback"></div>
+        </div>
+
+        <div class="form-group">
+            <label for="valorPorKm">Valor por km (R$):</label>
+            <input class="form-control" type="number" step="0.01" th:field="*{valorPorKm}"
+                   placeholder="Ex: 2.50"
+                   th:classappend="${#fields.hasErrors('valorPorKm')} ? 'is-invalid'">
+            <div th:errors="*{valorPorKm}" class="invalid-feedback"></div>
+        </div>
+
+        <hr>
+
+        <div class="form-group">
+            <label>Resultado do Cálculo:</label>
+            <input class="form-control" type="text" 
+                   th:value="${frete.valorTotal != null ? 'R$ ' + #numbers.formatDecimal(frete.valorTotal, 1, 2) : ''}" 
+                   placeholder="O valor será exibido após o cálculo"
+                   readonly>
+        </div>
+
+        <button type="submit" class="btn btn-primary mt-2">Calcular Frete</button>
+        <a th:href="@{/}" class="btn btn-secondary mt-2">Cancelar</a>
+    </form>
+</div>
+
+<div th:replace="~{fragmentos/footer :: footer}"></div>
+</body>
+</html>

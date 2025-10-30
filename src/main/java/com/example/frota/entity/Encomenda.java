@@ -1,11 +1,11 @@
 package com.example.frota.entity;
 
-
+import com.example.frota.dto.CadastroEncomenda;
 import jakarta.persistence.*;
+import jakarta.validation.Valid;
 import lombok.*;
 
 @Entity
-@Table(name = "encomenda")
 @NoArgsConstructor
 @Getter
 @Setter
@@ -14,37 +14,31 @@ import lombok.*;
 public class Encomenda {
 
     @Id
-    @Column(name = "encomenda_id", nullable = false)
-    private long id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "encomenda_id")
+    private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(nullable = false)
+    @JoinColumn(name = "caixa_id", nullable = false)
     private Caixa caixa;
 
-
-
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(nullable = false)
+    @JoinColumn(name = "caminhao_id", nullable = false)
     private Caminhao caminhao;
-
-    @Column(nullable = false)
-    private double pesoCubado;
-
-    @Column(nullable = false)
-    private double peso;
-
-    @Column(nullable = false)
-    private double distanciaKm;
-
-    @Column(nullable = false)
-    private double pesoCobranca;
-
-    @Column(nullable = false)
-    private double preco;
 
     @OneToOne
     @JoinColumn(name = "produto_id", nullable = false)
     private Produto produto;
+
+    @Column(nullable = false)
+    private double pesoReal;
+
+    @Column(nullable = false)
+    private double distanciaKm;
+
+    public Encomenda(@Valid CadastroEncomenda dados) {
+    }
+
 
     @Transient
     public double getPesoCubado() {
@@ -53,6 +47,12 @@ public class Encomenda {
 
     @Transient
     public double getPesoCobranca() {
-        return Math.max(peso, getPesoCubado());
+        return Math.max(pesoReal, getPesoCubado());
+    }
+
+    @Transient
+    public double getPreco() {
+        double taxaPorKgKm = 2.50;
+        return getPesoCobranca() * distanciaKm * taxaPorKgKm;
     }
 }
