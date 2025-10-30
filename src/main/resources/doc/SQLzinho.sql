@@ -1,4 +1,4 @@
-CREATE DATABASE frota
+CREATE  DATABASE frota
 USE frota
 
 -- Inserir 5 Marcas
@@ -73,43 +73,43 @@ INSERT INTO produto (peso, altura, largura, comprimento) VALUES
 (18.6, 0.55, 0.65, 0.75); -- Materiais de construção
 
 -- Inserir 12 Encomendas com TODOS os campos obrigatórios
-INSERT INTO encomenda (encomenda_id, caixa_caixa_id, caminhao_caminhao_id, produto_id, peso, distancia_km, peso_cobranca, peso_cubado, preco) VALUES
+INSERT INTO encomenda (encomenda_id, caixa_id, caminhao_id, produto_id, peso_real, distancia_km) VALUES
 -- Encomenda 1: Caixa pequena (0.3x0.4x0.5 = 0.06m³ * 300 = 18kg cubado)
-(1, 1, 1, 1, 2.5, 150.0, 18.0, 18.0, 250.0),
+(1, 1, 1, 1, 2.5, 150.0),
 
 -- Encomenda 2: Caixa média (0.6x0.7x0.8 = 0.336m³ * 300 = 100.8kg cubado)
-(2, 4, 2, 4, 8.5, 200.0, 100.8, 100.8, 320.0),
+(2, 4, 2, 4, 8.5, 200.0),
 
 -- Encomenda 3: Caixa grande (0.8x0.9x1.0 = 0.72m³ * 300 = 216kg cubado)
-(3, 6, 3, 7, 25.4, 300.0, 216.0, 216.0, 450.0),
+(3, 6, 3, 7, 25.4, 300.0),
 
 -- Encomenda 4: Caixa pequena (0.4x0.5x0.6 = 0.12m³ * 300 = 36kg cubado)
-(4, 2, 4, 2, 1.8, 180.0, 36.0, 36.0, 220.0),
+(4, 2, 4, 2, 1.8, 180.0),
 
 -- Encomenda 5: Caixa pequena (0.5x0.6x0.7 = 0.21m³ * 300 = 63kg cubado)
-(5, 3, 5, 3, 3.2, 220.0, 63.0, 63.0, 280.0),
+(5, 3, 5, 3, 3.2, 220.0),
 
 -- Encomenda 6: Caixa média (0.7x0.8x0.9 = 0.504m³ * 300 = 151.2kg cubado)
-(6, 5, 6, 5, 12.3, 250.0, 151.2, 151.2, 380.0),
+(6, 5, 6, 5, 12.3, 250.0),
 
 -- Encomenda 7: Caixa pequena (peso real maior que cubado)
-(7, 1, 7, 6, 15.7, 170.0, 18.0, 18.0, 290.0),
+(7, 1, 7, 6, 15.7, 170.0),
 
 -- Encomenda 8: Caixa média (peso cubado maior que real)
-(8, 4, 8, 8, 32.1, 280.0, 100.8, 100.8, 420.0),
+(8, 4, 8, 8, 32.1, 280.0),
 
 -- Encomenda 9: Caixa pequena (peso cubado maior que real)
-(9, 2, 9, 9, 28.9, 190.0, 36.0, 36.0, 350.0),
+(9, 2, 9, 9, 28.9, 190.0),
 
 -- Encomenda 10: Caixa pequena (peso cubado maior que real)
-(10, 3, 10, 10, 5.5, 160.0, 63.0, 63.0, 240.0),
+(10, 3, 10, 10, 5.5, 160.0),
 
 -- Encomenda 11: Caixa média (peso cubado maior que real)
-(11, 5, 11, 11, 7.8, 210.0, 151.2, 151.2, 310.0),
+(11, 5, 11, 11, 7.8, 210.0),
 
 -- Encomenda 12: Caixa grande (peso cubado maior que real)
-(12, 6, 12, 12, 18.6, 320.0, 216.0, 216.0, 480.0);
-
+(12, 6, 12, 12, 18.6, 320.0);
+ 
 SELECT *
 FROM caixa;
 
@@ -123,4 +123,4 @@ SELECT *
 FROM marca;
 
 SELECT *
-FROM produto;
+FROM produto
