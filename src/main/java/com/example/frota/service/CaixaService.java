@@ -1,14 +1,18 @@
 package com.example.frota.service;
 
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.example.frota.dto.AtualizacaoCaixa;
 import com.example.frota.entity.Caixa;
 import com.example.frota.entity.Produto;
 import com.example.frota.repository.CaixaRepository;
+
+import jakarta.persistence.EntityNotFoundException;
 
 @Service
 public class CaixaService {
@@ -28,6 +32,13 @@ public class CaixaService {
     }
     public Optional<Caixa> procurarPorId(Long id) {
 		return caixaRepository.findById(id);
+    }
+    public List<Caixa> procurarTodos() {
+		return caixaRepository.findAll();
 	}
-    
+    public void atualizarCaixa(AtualizacaoCaixa dados) {
+	    Caixa caixa = caixaRepository.findById(dados.id())
+	        .orElseThrow(() -> new EntityNotFoundException("Caixa não encontrada"));
+	    caixa.atualizarInformacoes(dados);
+	}
 }

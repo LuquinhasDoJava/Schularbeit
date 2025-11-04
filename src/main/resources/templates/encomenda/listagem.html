@@ -18,7 +18,7 @@
 
     <a href="/encomenda/formulario" class="btn btn-success mb-3">Nova Encomenda</a>
 
-    <div th:if="${listaEncomendas.size() > 0}">
+    <div th:if="${lista.size() > 0}">
         <table class="table table-hover table-responsive-xl">
             <thead class="thead-light">
                 <tr>
@@ -32,7 +32,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr th:each="encomenda : ${listaEncomendas}">
+                <tr th:each="encomenda : ${lista}">
                     <td th:text="${encomenda.descricao}"></td>
                     <td th:text="${#numbers.formatDecimal(encomenda.peso, 1, 2)}"></td>
                     <td th:text="${#numbers.formatDecimal(encomenda.valor, 1, 2)}"></td>

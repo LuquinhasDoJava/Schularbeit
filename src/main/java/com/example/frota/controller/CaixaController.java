@@ -46,7 +46,7 @@ public class CaixaController {
     @Transactional
     public String cadastrar (@Valid CadastroCaixa dados) {
         caixaService.salvar(new Caixa(dados));
-        return "redirect:marca";
+        return "redirect:caixa";
     }
     @PutMapping
     @Transactional

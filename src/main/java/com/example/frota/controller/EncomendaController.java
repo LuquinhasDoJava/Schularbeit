@@ -38,6 +38,8 @@ public class EncomendaController {
 		if(id != null) {
 			var encomenda = encomendaService.procurarPorId(id);
 			model.addAttribute("encomenda", encomenda);
+		} else {
+	        model.addAttribute("encomenda", new Encomenda());
 		}
 		return "encomenda/formulario";     
 	}

@@ -1,5 +1,7 @@
 package com.example.frota.entity;
 
+import java.time.LocalDate;
+
 import com.example.frota.dto.CadastroEncomenda;
 import jakarta.persistence.*;
 import jakarta.validation.Valid;
@@ -35,6 +37,12 @@ public class Encomenda {
 
     @Column(nullable = false)
     private double distanciaKm;
+    
+    private String descricao;
+    
+    private Double valor;
+    
+    private LocalDate dataEntrega;
 
     public Encomenda(@Valid CadastroEncomenda dados) {
     }

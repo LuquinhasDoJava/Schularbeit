@@ -28,10 +28,10 @@
         </div>
 
         <div class="form-group">
-            <label for="peso">Peso (kg):</label>
-            <input class="form-control" type="number" step="0.01" th:field="*{peso}"
-                   th:classappend="${#fields.hasErrors('peso')} ? 'is-invalid'">
-            <div th:errors="*{peso}" class="invalid-feedback"></div>
+            <label for="pesoReal">Peso (kg):</label>
+            <input class="form-control" type="number" step="0.01" th:field="*{pesoReal}"
+                   th:classappend="${#fields.hasErrors('pesoReal')} ? 'is-invalid'">
+            <div th:errors="*{pesoReal}" class="invalid-feedback"></div>
         </div>
 
         <div class="form-group">
@@ -42,27 +42,27 @@
         </div>
 
         <div class="form-group">
-            <label for="produtoId">Produto:</label>
-            <select class="form-control" th:field="*{produtoId}"
-                    th:classappend="${#fields.hasErrors('produtoId')} ? 'is-invalid'">
+            <label for="id">Produto:</label>
+            <select class="form-control" th:field="*{id}"
+                    th:classappend="${#fields.hasErrors('id')} ? 'is-invalid'">
                 <option value="">-Selecione um produto-</option>
                 <option th:each="produto : ${produtos}"
                         th:value="${produto.id}"
                         th:text="${produto.nome}"></option>
             </select>
-            <div th:errors="*{produtoId}" class="invalid-feedback"></div>
+            <div th:errors="*{id}" class="invalid-feedback"></div>
         </div>
 
         <div class="form-group">
-            <label for="caminhaoId">Caminhão:</label>
-            <select class="form-control" th:field="*{caminhaoId}"
-                    th:classappend="${#fields.hasErrors('caminhaoId')} ? 'is-invalid'">
+            <label for="id">Caminhão:</label>
+            <select class="form-control" th:field="*{id}"
+                    th:classappend="${#fields.hasErrors('id')} ? 'is-invalid'">
                 <option value="">-Selecione um caminhão-</option>
                 <option th:each="caminhao : ${caminhoes}"
                         th:value="${caminhao.id}"
                         th:text="${caminhao.modelo + ' - ' + caminhao.placa}"></option>
             </select>
-            <div th:errors="*{caminhaoId}" class="invalid-feedback"></div>
+            <div th:errors="*{id}" class="invalid-feedback"></div>
         </div>
 
         <div class="form-group">
