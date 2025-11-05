@@ -28,17 +28,5 @@ public class Marca {
 	private long id;
 	private String nome;
 	private String pais;
-	
-	public Marca(DadosCadastroMarca dados) {
-		this.nome=dados.nome();
-		this.pais= dados.pais();
-	}
-	
-	public void atualizarInformacoes(@Valid DadosAtualizacaoMarca dados) {
-		if (dados.nome() != null) {
-			this.nome = dados.nome();
-			this.pais = dados.pais();
-		}
-	}
-	
+
 }

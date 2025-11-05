@@ -1,16 +1,16 @@
 package com.example.frota.caminhao;
 
-import com.example.frota.marca.Marca;
-
 import jakarta.validation.constraints.NotBlank;
 
 public record CadastroCaminhao(
-		@NotBlank
-		String modelo,
+		@NotBlank String modelo,
+        int ano,
 		String placa,
-		Marca marca,
-		double cargaMaxima,
-		int ano) {
+        double altura,
+        double largura,
+        double comprimento,
+		double cargaMaxima
+        ) {
 
 }
 

@@ -39,17 +39,17 @@ public class CaminhaoController {
 	} 
 	////////////////////////
 	//Novo GetMapping com DTO e Mapper
-	@GetMapping("/formulario")
+    @GetMapping("/formulario")
     public String mostrarFormulario(@RequestParam(required = false) Long id, Model model) {
-		AtualizacaoCaminhao dto;
+        AtualizacaoCaminhao dto;
         if (id != null) {
             //edição: Carrega dados existentes
             Caminhao caminhao = caminhaoService.procurarPorId(id)
-                .orElseThrow(() -> new EntityNotFoundException("Caminhão não encontrado"));
+                    .orElseThrow(() -> new EntityNotFoundException("Caminhão não encontrado"));
             dto = caminhaoMapper.toAtualizacaoDto(caminhao);
         } else {
-            // criação: DTO vazio
-            dto = new AtualizacaoCaminhao(null, "", "", null, null, null);
+            // criação: DTO vazio - use null para campos Double
+            dto = new AtualizacaoCaminhao(null, " ", null, " ", null, null, null, null, null);
         }
         model.addAttribute("caminhao", dto);
         model.addAttribute("marcas", marcaService.procurarTodos());

@@ -1,11 +1,6 @@
 package com.example.frota.caixa;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -29,6 +24,13 @@ public class Caixa {
 	private int altura;
 	private int largura;
 	private int comprimento;
+    private double pesoMaximo;
 	private String material;
 
+    @Transient
+    private double volume;
+
+    public double getVolume() {
+        return altura * largura * comprimento;
+    }
 }
