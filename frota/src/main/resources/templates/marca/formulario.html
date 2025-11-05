@@ -1,29 +1,47 @@
 <!DOCTYPE html>
-<html lang ="en" xmlns:th="http://thymeleaf.org" >
+<html lang="en" xmlns:th="http://thymeleaf.org">
 <head th:replace="~{fragmentos/head :: head('Cadastro Marcas')}"></head>
 <body>
 <header th:replace="~{fragmentos/header :: header(activePage='marca')}"></header>
 
 <div>
-	<div class="box">
-		<h1>Cadastro Marca</h1>
-		<form method="post" action="/marca">
-			<input type="hidden" name="_method" value="put" th:if="${marca!= null}">
-			<input type="hidden" name="id" th:value="${marca?.id}">
-			
-			<div>
-				<label for="nome"> Nome: </label>
-				<input type="text" id="nome" name="nome" th:value="${marca?.nome}">
-			</div>
-			
-			<div>
-				<label for="pais"> Pais: </label>
-				<input type="text" id="pais" name="pais" th:value="${marca?.pais}">
-			</div>
-			
-			<input type="submit" value="Cadastrar">
-		</form>
-	</div>
+    <div class="box">
+        <h1>Cadastro Marca</h1>
+
+        <!-- Exibir mensagens de sucesso/erro -->
+        <div th:if="${message}" class="alert alert-success" th:text="${message}"></div>
+        <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
+
+        <!-- FORMULÁRIO SIMPLIFICADO - SEM VALIDAÇÃO THYMELEAF -->
+        <form method="post" th:action="@{/marca/salvar}">
+            <!-- Para edição (PUT) -->
+            <input type="hidden" name="_method" th:if="${marca?.id != null}" value="put">
+            <input type="hidden" name="id" th:value="${marca?.id}">
+
+            <div>
+                <label for="nome">Nome:</label>
+                <input type="text" id="nome" name="nome" th:value="${marca?.nome}" required>
+                <!-- Mensagem de erro simples -->
+                <small th:if="${param.error != null and param.error.contains('nome')}" class="text-danger">
+                    Nome é obrigatório
+                </small>
+            </div>
+
+            <div>
+                <label for="pais">País:</label>
+                <input type="text" id="pais" name="pais" th:value="${marca?.pais}" required>
+                <!-- Mensagem de erro simples -->
+                <small th:if="${param.error != null and param.error.contains('pais')}" class="text-danger">
+                    País é obrigatório
+                </small>
+            </div>
+
+            <input type="submit" value="Cadastrar">
+            <a th:href="@{/marca}" class="btn btn-secondary">Cancelar</a>
+        </form>
+    </div>
 </div>
+
+<footer th:replace="~{fragmentos/footer :: footer}"></footer>
 </body>
 </html>
