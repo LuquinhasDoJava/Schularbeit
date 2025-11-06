@@ -1,95 +1,115 @@
 <!DOCTYPE html>
-<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{fragmentos/head :: head('Manter Caminhão')}"></head>
+<html lang="en" xmlns:th="http://thymeleaf.org">
+<head th:replace="~{fragmentos/head :: head('Cadastro de Caminhão')}"></head>
 <body>
-	<header
-		th:replace="~{fragmentos/header :: header(activePage='Caminhao')}"></header>
-	<div class="container-fluid" style="max-width: 900px; margin: 0 auto;">
-		<h2 class="text-center"
-			th:text="(${caminhao != null} ? 'Editar Caminhão' : 'Novo Caminhão')"></h2>
-		<div th:if="${message != null}"
-			class="alert alert-success alert-dismissible fade show text-center"
-			role="alert">
-			[[${message}]]
-			<button type="button" class="close btn-sm" data-dismiss="alert"
-				aria-label="Close">
-				<span aria-hidden="true">&times;</span>
-			</button>
-		</div>
+<header th:replace="~{fragmentos/header :: header(activePage='caminhao')}"></header>
 
-		<form th:action="@{/caminhao/salvar}" th:object="${caminhao}"
-			method="post" >
-			<input type="hidden" th:field="*{id}" />
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title mb-0">
+                        <i class="fas fa-truck me-2"></i>
+                        <span th:text="${caminhao?.id != null} ? 'Editar Caminhão' : 'Cadastrar Caminhão'"></span>
+                    </h3>
+                </div>
+                <div class="card-body">
 
-			<div class="form-group" style="margin-top: 20px;">
-				<label>Escolha uma Marca:</label>
-				<select th:field="*{marcaId}"
-					class="form-control"
-					th:classappend="${#fields.hasErrors('marcaId')} ? 'is-invalid'">
-					<option value="">-Selecione uma marca-</option>
-					<option th:each="marca : ${marcas}"
-					    th:value="${marca.id}"
-						th:text="${marca.nome}"></option>
-				</select>
-				<div th:errors="*{marcaId}" class="invalid-feedback"></div>
-			</div>
+                    <!-- Mensagens -->
+                    <div th:if="${message}" class="alert alert-success alert-dismissible fade show" role="alert">
+                        <span th:text="${message}"></span>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                    <div th:if="${error}" class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <span th:text="${error}"></span>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
 
-			<div class="form-group">
-				<label for="modelo"> Modelo: </label>
-				<input class="form-control" type="text" th:field="*{modelo}"
-					th:classappend="${#fields.hasErrors('modelo')} ? 'is-invalid'">
-					<div th:errors="*{modelo}" class="invalid-feedback"></div>
-			</div>
+                    <form method="post" th:action="@{/caminhao/salvar}">
+                        <input type="hidden" name="_method" th:if="${caminhao?.id != null}" value="put">
+                        <input type="hidden" name="id" th:value="${caminhao?.id}">
 
-            <div class="form-group">
-                <label for="ano"> Ano: </label> <input class="form-control"
-                                                       type="number" th:field="*{ano}"
-                                                       th:classappend="${#fields.hasErrors('ano')} ? 'is-invalid'">
-                <div th:errors="*{ano}" class="invalid-feedback"></div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="modelo" class="form-label">Modelo *</label>
+                                <input type="text" class="form-control" id="modelo" name="modelo"
+                                       th:value="${caminhao?.modelo}" required>
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label for="marcaId" class="form-label">Marca *</label>
+                                <select class="form-select" id="marcaId" name="marcaId" required>
+                                    <option value="">Selecione uma marca</option>
+                                    <option th:each="marca : ${marcas}"
+                                            th:value="${marca.id}"
+                                            th:text="${marca.nome}"
+                                            th:selected="${caminhao?.marcaId == marca.id}">
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="ano" class="form-label">Ano *</label>
+                                <input type="number" class="form-control" id="ano" name="ano"
+                                       th:value="${caminhao?.ano}" min="2000" max="2030" required>
+                                <div class="form-text">Ano a partir de 2000</div>
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label for="placa" class="form-label">Placa *</label>
+                                <input type="text" class="form-control" id="placa" name="placa"
+                                       th:value="${caminhao?.placa}" required>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <label for="altura" class="form-label">Altura (m) *</label>
+                                <input type="number" step="0.01" class="form-control" id="altura" name="altura"
+                                       th:value="${caminhao?.altura}" min="0.1" required>
+                            </div>
+
+                            <div class="col-md-4 mb-3">
+                                <label for="largura" class="form-label">Largura (m) *</label>
+                                <input type="number" step="0.01" class="form-control" id="largura" name="largura"
+                                       th:value="${caminhao?.largura}" min="0.1" required>
+                            </div>
+
+                            <div class="col-md-4 mb-3">
+                                <label for="comprimento" class="form-label">Comprimento (m) *</label>
+                                <input type="number" step="0.01" class="form-control" id="comprimento" name="comprimento"
+                                       th:value="${caminhao?.comprimento}" min="0.1" required>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="cargaMaxima" class="form-label">Carga Máxima (kg) *</label>
+                            <input type="number" step="0.01" class="form-control" id="cargaMaxima" name="cargaMaxima"
+                                   th:value="${caminhao?.cargaMaxima}" min="0.1" required>
+                        </div>
+
+                        <div class="d-flex gap-2">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save me-1"></i>
+                                <span th:text="${caminhao?.id != null} ? 'Atualizar' : 'Cadastrar'"></span>
+                            </button>
+                            <a th:href="@{/caminhao}" class="btn btn-secondary">
+                                <i class="fas fa-times me-1"></i>Cancelar
+                            </a>
+                        </div>
+                    </form>
+                </div>
             </div>
+        </div>
+    </div>
+</div>
 
-			<div class="form-group">
-				<label for="placa"> Placa: </label> <input class="form-control"
-					type="text" th:field="*{placa}"
-					 th:classappend="${#fields.hasErrors('placa')} ? 'is-invalid'">
-                <div th:errors="*{placa}" class="invalid-feedback"></div>
-            </div>
+<footer th:replace="~{fragmentos/footer :: footer}"></footer>
 
-            <div class="form-group">
-                <label for="altura"> Altura: </label>
-                <input class="form-control" type="text" th:field="*{altura}"
-                       th:classappend="${#fields.hasErrors('altura')} ? 'is-invalid'">
-                <div th:errors="*{altura}" class="invalid-feedback"></div>
-            </div>
-
-            <div class="form-group">
-                <label for="largura"> Largura: </label>
-                <input class="form-control" type="text" th:field="*{largura}"
-                       th:classappend="${#fields.hasErrors('largura')} ? 'is-invalid'">
-                <div th:errors="*{largura}" class="invalid-feedback"></div>
-            </div>
-
-            <div class="form-group">
-                <label for="comprimento"> Comprimento: </label>
-                <input class="form-control" type="text" th:field="*{comprimento}"
-                       th:classappend="${#fields.hasErrors('comprimento')} ? 'is-invalid'">
-                <div th:errors="*{comprimento}" class="invalid-feedback"></div>
-            </div>
-
-            <div class="form-group">
-				<label for="cargaMaxima"> Carga Maxima: </label> <input
-					class="form-control" type="number"
-					th:field="*{cargaMaxima}"
-					th:classappend="${#fields.hasErrors('cargaMaxima')} ? 'is-invalid'">
-                <div th:errors="*{cargaMaxima}" class="invalid-feedback"></div>
-			</div>
-			
-			<button type="submit" class="btn btn-primary">
-                <span th:text="${caminhao.id != null} ? 'Atualizar' : 'Cadastrar'"></span>
-            </button>
-             <a th:href="@{/caminhao}" class="btn btn-secondary">Cancelar</a>
-		</form>
-	</div>
-	<div th:replace="~{fragmentos/footer :: footer}"></div>
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

@@ -2,63 +2,75 @@
 <header th:fragment="header(activePage)">
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container-fluid">
-			<a class="navbar-brand" href="#"> <i class="fas fa-truck me-2"></i>FrotaLux </a>
+            <a class="navbar-brand" href="#"> <i class="fas fa-truck me-2"></i>FrotaLux </a>
 
-
-			<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            
+
             <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
 
-				<ul class="navbar-nav me-auto">
-					<!-- Item normal -->
-					<li class="nav-item"><a class="nav-link"
-						th:classappend="${activePage == 'dashboard'} ? 'active' : ''"
-						th:href="@{/home/dashboard}"> <i class="fas fa-home me-1"></i>
-							Início
-					</a></li>
-
-					<!-- Dropdown de Marcas -->
-					<li class="nav-item dropdown">
-						<a class="nav-link dropdown-toggle" id="filmesDropdown"
-						role="button" data-bs-toggle="dropdown" aria-expanded="false"
-						th:classappend="${activePage == '' || activePage == 'caminhao'} ? 'active' : ''"
-						style="cursor: pointer;"> <i class="fas fa-film me-1"></i>
-							caminhao
-						</a>
-						<ul class="dropdown-menu" aria-labelledby="filmesDropdown">
-							<li><a class="dropdown-item"
-								th:classappend="${activePage == 'caminhao'} ? 'active' : ''"
-								th:href="@{/caminhao}"> <i class="fas fa-list me-1"></i> Listagem Caminhao</a>
-							</li>
-							<li><a class="dropdown-item"
-								th:classappend="${activePage == 'caminhao'} ? 'active' : ''"
-								th:href="@{/caminhao/formulario}"> <i class="fas fa-star me-1"></i> Cadastrar Caminhao
-							</a></li>
-						</ul>
-					</li>
-				</ul>
-
-				<div class="d-flex align-items-center">
-                   <!--  <div class="dropdown">
-                        <a href="#" class="d-block link-light text-decoration-none dropdown-toggle" 
-                           id="dropdownUser" data-bs-toggle="dropdown">
-                            <span th:if="${session.usuarioLogado != null}" th:text="${session.usuarioLogado.user}" class="me-2 user-greeting"></span>
-                            <img th:src="@{/img/user-avatar.png}" alt="Perfil" width="32" height="32" class="rounded-circle">
+                    <!-- Caminhões -->
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown"
+                           th:classappend="${activePage == 'caminhao'} ? 'active' : ''">
+                            <i class="fas fa-truck me-1"></i>Caminhões
                         </a>
-                        <ul class="dropdown-menu dropdown-menu-end">
-                            <li><a class="dropdown-item" href="#"><i class="fas fa-user me-2"></i> Perfil</a></li>
-                            <li><a class="dropdown-item" href="#"><i class="fas fa-cog me-2"></i> Configurações</a></li>
-                            <li><hr class="dropdown-divider"></li>
-                            <li>
-                                <a class="dropdown-item text-danger" th:href="@{/logout}">
-                                    <i class="fas fa-sign-out-alt me-2"></i> Sair
-                                </a>
-                            </li>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" th:href="@{/caminhao}">Listagem</a></li>
+                            <li><a class="dropdown-item" th:href="@{/caminhao/formulario}">Cadastrar</a></li>
                         </ul>
-                    </div> -->
-                </div>
+                    </li>
+
+                    <!-- Marcas -->
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown"
+                           th:classappend="${activePage == 'marca'} ? 'active' : ''">
+                            <i class="fas fa-tags me-1"></i>Marcas
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" th:href="@{/marca}">Listagem</a></li>
+                            <li><a class="dropdown-item" th:href="@{/marca/formulario}">Cadastrar</a></li>
+                        </ul>
+                    </li>
+
+                    <!-- Caixas -->
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown"
+                           th:classappend="${activePage == 'caixa'} ? 'active' : ''">
+                            <i class="fas fa-box me-1"></i>Caixas
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" th:href="@{/caixa}">Listagem</a></li>
+                            <li><a class="dropdown-item" th:href="@{/caixa/formulario}">Cadastrar</a></li>
+                        </ul>
+                    </li>
+
+                    <!-- Produtos -->
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown"
+                           th:classappend="${activePage == 'produto'} ? 'active' : ''">
+                            <i class="fas fa-cube me-1"></i>Produtos
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" th:href="@{/produto}">Listagem</a></li>
+                            <li><a class="dropdown-item" th:href="@{/produto/formulario}">Cadastrar</a></li>
+                        </ul>
+                    </li>
+
+                    <!-- Encomendas -->
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown"
+                           th:classappend="${activePage == 'encomenda'} ? 'active' : ''">
+                            <i class="fas fa-shipping-fast me-1"></i>Encomendas
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" th:href="@{/encomenda}">Listagem</a></li>
+                            <li><a class="dropdown-item" th:href="@{/encomenda/formulario}">Cadastrar</a></li>
+                        </ul>
+                    </li>
+                </ul>
             </div>
         </div>
     </nav>

@@ -1,7 +1,6 @@
 package com.example.frota.caixa;
 
 import jakarta.persistence.*;
-import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -34,22 +33,4 @@ public class Caixa {
     public double getVolume() {
         return altura * largura * comprimento;
     }
-    
-	public Caixa(CadastroCaixa dados) {
-		this.comprimento = dados.comprimento();
-		this.largura = dados.largura();
-		this.altura = dados.altura();
-		this.pesoMaximo = dados.pesoMaximo();
-		this.material = dados.material();
-	}
-	
-	public void atualizarInformacoes(@Valid AtualizacaoCaixa dados) {
-		if (dados.comprimento() != null) {
-			this.comprimento = dados.comprimento();
-			this.largura = dados.largura();
-			this.altura = dados.altura();
-			this.pesoMaximo = dados.pesoMaximo();
-			this.material = dados.material();
-		}
-	}
 }

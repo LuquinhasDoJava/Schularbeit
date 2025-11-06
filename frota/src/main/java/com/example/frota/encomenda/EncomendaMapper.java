@@ -24,7 +24,7 @@ public interface EncomendaMapper {
     @Mapping(target = "produto", source = "produtoId", qualifiedByName = "idToProduto")
     void updateEntityFromDto(AtualizacaoEncomenda dto, @MappingTarget Encomenda encomenda);
 
-    // Método para converter produtoId em objeto Produto
+    // Metodo para converter produtoId em objeto Produto
     @Named("idToProduto")
     default Produto idToProduto(Integer produtoId) {
         if (produtoId == null) return null;

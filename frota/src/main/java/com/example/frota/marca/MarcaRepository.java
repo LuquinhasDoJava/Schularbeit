@@ -7,6 +7,5 @@ import org.springframework.transaction.annotation.Transactional;
 @Repository
 @Transactional
 public interface MarcaRepository extends JpaRepository<Marca, Long> {
-	
-	Marca findMarcaById(Long id);
+
 }

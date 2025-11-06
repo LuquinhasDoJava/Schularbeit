@@ -1,14 +1,15 @@
 package com.example.frota.produto;
 
+import java.math.BigDecimal;
 
 public record ListagemProduto(
         Integer id,
         Long caixaId,
-        double largura,
-        double altura,
-        double comprimento,
-        double peso,
-        double volume
+        BigDecimal largura,
+        BigDecimal altura,
+        BigDecimal comprimento,
+        BigDecimal peso,
+        BigDecimal volume
 ) {
     public ListagemProduto(Produto produto) {
         this(
@@ -18,7 +19,7 @@ public record ListagemProduto(
                 produto.getAltura(),
                 produto.getComprimento(),
                 produto.getPeso(),
-                produto.getVolume()
+                produto.getVolume() != null ? produto.getVolume() : BigDecimal.ZERO
         );
     }
 }

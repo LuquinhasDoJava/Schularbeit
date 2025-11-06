@@ -9,6 +9,7 @@ public record CadastroProduto(
         @NotNull @Positive BigDecimal largura,
         @NotNull @Positive BigDecimal altura,
         @NotNull @Positive BigDecimal comprimento,
-        @NotNull @Positive BigDecimal peso
+        @NotNull @Positive BigDecimal peso,
+        @NotNull String destino
 ) {
 }
