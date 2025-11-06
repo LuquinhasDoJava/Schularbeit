@@ -5,7 +5,6 @@ import com.example.frota.caixa.Caixa;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.math.BigDecimal;
 
 @Entity
 @Table(name = "produto")
@@ -25,15 +24,15 @@ public class Produto {
     @JoinColumn(name = "caixa_id")
     private Caixa caixa;
 
-    private BigDecimal largura;
+    private double largura;
 
-    private BigDecimal altura;
+    private double altura;
 
-    private BigDecimal comprimento;
+    private double comprimento;
 
-    private BigDecimal peso;
+    private double peso;
 
     @Transient
-    private BigDecimal volume;
+    private double volume;
 
 }

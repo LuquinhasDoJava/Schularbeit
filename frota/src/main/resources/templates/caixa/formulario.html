@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragmentos/head :: head('Manter Caixa')}"></head>
+<body>
+	<header
+		th:replace="~{fragmentos/header :: header(activePage='Caixa')}"></header>
+	<div class="container-fluid" style="max-width: 900px; margin: 0 auto;">
+		<h2 class="text-center"
+			th:text="(${caixa != null} ? 'Editar Caixa' : 'Novo Caixa')"></h2>
+		<div th:if="${message != null}"
+			class="alert alert-success alert-dismissible fade show text-center"
+			role="alert">
+			[[${message}]]
+			<button type="button" class="close btn-sm" data-dismiss="alert"
+				aria-label="Close">
+				<span aria-hidden="true">&times;</span>
+			</button>
+		</div>
+
+		<form th:action="@{/caixa/salvar}" th:object="${caixa}"
+			method="post" >
+			<input type="hidden" th:field="*{id}" />
+
+			<div class="form-group" style="margin-top: 20px;">
+				<label for="comprimento"> Comprimento (m): </label> <input
+					class="form-control" type="number"
+					th:field="*{comprimento}"
+					th:classappend="${#fields.hasErrors('comprimento')} ? 'is-invalid'">
+                <div th:errors="*{comprimento}" class="invalid-feedback"></div>
+			</div>
+			<div class="form-group">
+				<label for="largura"> Largura (m): </label> <input
+					class="form-control" type="number"
+					th:field="*{largura}"
+					th:classappend="${#fields.hasErrors('largura')} ? 'is-invalid'">
+                <div th:errors="*{largura}" class="invalid-feedback"></div>
+			</div>
+			<div class="form-group">
+				<label for="altura"> Altura (m): </label> <input
+					class="form-control" type="number"
+					th:field="*{altura}"
+					th:classappend="${#fields.hasErrors('altura')} ? 'is-invalid'">
+                <div th:errors="*{altura}" class="invalid-feedback"></div>
+			</div>
+			<div class="form-group">
+				<label for="pesoMaximo"> Peso máximo (kg): </label> <input
+					class="form-control" type="number"
+					th:field="*{pesoMaximo}"
+					th:classappend="${#fields.hasErrors('pesoMaximo')} ? 'is-invalid'">
+                <div th:errors="*{pesoMaximo}" class="invalid-feedback"></div>
+			</div>
+			<div class="form-group">
+				<label for="material"> Material: </label> <input class="form-control"
+					type="text" th:field="*{material}"
+					 th:classappend="${#fields.hasErrors('material')} ? 'is-invalid'">
+                <div th:errors="*{material}" class="invalid-feedback"></div>
+            </div>
+			<button type="submit" class="btn btn-primary">
+                <span th:text="${caixa.id != null and caixa.id > 0} ? 'Atualizar' : 'Cadastrar'"></span>
+            </button>
+             <a th:href="@{/caixas}" class="btn btn-secondary">Cancelar</a>
+		</form>
+	</div>
+	<div th:replace="~{fragmentos/footer :: footer}"></div>
+</body>
+</html>

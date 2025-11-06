@@ -3,16 +3,10 @@ package com.example.frota.marca;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 
@@ -20,81 +14,39 @@ import jakarta.validation.Valid;
 @RequestMapping("/marca")
 public class MarcaController {
 
-    @Autowired
-    private MarcaService marcaService;
+	@Autowired
+	private MarcaService marcaService;
 
-    @Autowired
-    private MarcaMapper marcaMapper;
-
-    @GetMapping
-    public String carregaPaginaListagem(Model model) {
-        model.addAttribute("listaMarcas", marcaService.procurarTodos());
-        return "marca/listagem";
-    }
-
-    @GetMapping("/formulario")
-    public String mostrarFormulario(@RequestParam(required = false) Long id, Model model) {
-        AtualizacaoMarca dto;
-        if (id != null) {
-            // edição: Carrega dados existentes
-            Marca marca = marcaService.procurarPorId(id)
-                    .orElseThrow(() -> new EntityNotFoundException("Marca não encontrada"));
-            dto = marcaMapper.toAtualizacaoDto(marca);
-        } else {
-            // criação: DTO vazio
-            dto = new AtualizacaoMarca(null, "", "");
-        }
-        model.addAttribute("marca", dto);
-        return "marca/formulario";
-    }
-
-    @GetMapping("/formulario/{id}")
-    public String carregaPaginaFormulario(@PathVariable("id") Long id, Model model,
-                                          RedirectAttributes redirectAttributes) {
-        AtualizacaoMarca dto;
-        try {
-            if (id != null) {
-                Marca marca = marcaService.procurarPorId(id)
-                        .orElseThrow(() -> new EntityNotFoundException("Marca não encontrada"));
-                dto = marcaMapper.toAtualizacaoDto(marca);
-                model.addAttribute("marca", dto);
-            }
-            return "marca/formulario";
-        } catch (EntityNotFoundException e) {
-            redirectAttributes.addFlashAttribute("error", e.getMessage());
-            return "redirect:/marca";
-        }
-    }
-
-    @PostMapping("/salvar")
-    public String salvar(@ModelAttribute("marca") @Valid AtualizacaoMarca dto,
-                         BindingResult result,
-                         RedirectAttributes redirectAttributes) {
-        if (result.hasErrors()) {
-            return "marca/formulario";
-        }
-        try {
-            Marca marcaSalva = marcaService.salvarOuAtualizar(dto);
-            String mensagem = dto.id() != null
-                    ? "Marca '" + marcaSalva.getNome() + "' atualizada com sucesso!"
-                    : "Marca '" + marcaSalva.getNome() + "' criada com sucesso!";
-            redirectAttributes.addFlashAttribute("message", mensagem);
-            return "redirect:/marca";
-        } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("error", e.getMessage());
-            return "redirect:/marca/formulario" + (dto.id() != null ? "?id=" + dto.id() : "");
-        }
-    }
-
-    @GetMapping("/delete/{id}")
-    @Transactional
-    public String deleteMarca(@PathVariable("id") Long id, RedirectAttributes redirectAttributes) {
-        try {
-            marcaService.apagarPorId(id);
-            redirectAttributes.addFlashAttribute("message", "A marca " + id + " foi apagada!");
-        } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("error", e.getMessage());
-        }
-        return "redirect:/marca";
-    }
+	@GetMapping              
+	public String carregaPaginaListagem(Model model){ 
+		model.addAttribute("listaMarcas",marcaService.procurarTodos() );
+		return "marca/listagem";              
+	} 
+	@GetMapping ("/formulario")             
+	public String carregaPaginaFormulario(Long id, Model model) {
+		if(id != null) {
+			var marca =marcaService.procurarPorId(id);
+			model.addAttribute("marca", marca);
+		}
+		return "marca/formulario";     
+	}
+	@PostMapping("/excluir")
+	@Transactional
+	public String excluir (Long id) {
+		marcaService.apagarPorId(id);
+		return "redirect:/marca";
+	}
+	// Método para gravar/atualizar o formulário 
+	@PostMapping("/salvar") 
+	@Transactional
+	public String cadastrar (@Valid DadosCadastroMarca dados) {
+		marcaService.salvar(new Marca(dados));
+		return "redirect:/marca";
+	}
+	@PostMapping("/atualizar")
+	@Transactional
+	public String atualizar (@Valid DadosAtualizacaoMarca dados) {
+		marcaService.atualizarMarca(dados);
+		return "redirect:/marca";
+	}
 }
