@@ -30,5 +30,14 @@ public record AtualizacaoCaminhao(
         Double cargaMaxima,
 
         @NotNull(message = "Marca é obrigatória")
-        Long marcaId
+        Long marcaId,
+
+        @Positive(message = "Quilometragem deve ser positiva")
+        Double quilometragemAtual,
+
+        @Positive(message = "Quilometragem deve ser positiva")
+        Double quilometragemUltimaManutencao,
+
+        @Positive(message = "Quilometragem deve ser positiva")
+        Double quilometragemUltimaTrocaPneus
 ) {}

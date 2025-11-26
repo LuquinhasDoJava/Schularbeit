@@ -28,6 +28,7 @@ import jakarta.validation.Valid;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Controller
@@ -45,6 +46,9 @@ public class EncomendaController {
 
     @Autowired
     private CaixaService caixaService;
+
+    @Autowired
+    private EncomendaRepository encomendaRepository;
 
     @GetMapping
     public String carregaPaginaListagem(Model model) {
@@ -286,9 +290,7 @@ public class EncomendaController {
                                      RedirectAttributes redirectAttributes) {
         try {
             // Cria a encomenda automaticamente
-            Encomenda encomendaCriada = encomendaService.criarEncomendaAutomatica(
-                    produtoId, caixaId, origem, destino, distancia, preco
-            );
+            Encomenda encomendaCriada = encomendaService.criarEncomendaAutomatica(produtoId, caixaId, origem, destino, distancia, preco);
 
             redirectAttributes.addFlashAttribute("message",
                     "Encomenda #" + encomendaCriada.getId() + " criada com sucesso!");
@@ -324,8 +326,8 @@ public class EncomendaController {
             Map<String, Object> responseBody = response.getBody();
 
             if (responseBody != null && "OK".equals(responseBody.get("status"))) {
-                Map<String, Object> rows = ((java.util.List<Map<String, Object>>) responseBody.get("rows")).get(0);
-                Map<String, Object> elements = ((java.util.List<Map<String, Object>>) rows.get("elements")).get(0);
+                Map<String, Object> rows = ((List<Map<String, Object>>) responseBody.get("rows")).get(0);
+                Map<String, Object> elements = ((List<Map<String, Object>>) rows.get("elements")).get(0);
 
                 if ("OK".equals(elements.get("status"))) {
                     Map<String, Object> distance = (Map<String, Object>) elements.get("distance");
@@ -381,5 +383,69 @@ public class EncomendaController {
         double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 
         return R * c;
+    }
+
+
+    @PostMapping("/{id}/status")
+    public String atualizarStatus(@PathVariable Integer id,
+                                  @RequestParam Encomenda.StatusEntrega status,
+                                  RedirectAttributes redirectAttributes) {
+        try {
+            encomendaService.atualizarStatus(id, status);
+            redirectAttributes.addFlashAttribute("message", "Status atualizado para: " + status);
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", e.getMessage());
+        }
+        return "redirect:/encomenda";
+    }
+
+    @PostMapping("/{id}/localizacao")
+    @ResponseBody
+    public Map<String, Object> atualizarLocalizacao(@PathVariable Integer id,
+                                                    @RequestParam Double latitude,
+                                                    @RequestParam Double longitude) {
+        Map<String, Object> response = new HashMap<>();
+        try {
+            Encomenda encomenda = encomendaService.atualizarLocalizacao(id, latitude, longitude);
+            response.put("success", true);
+            response.put("message", "Localização atualizada");
+
+            // TODO: Implementar envio de WhatsApp aqui
+            enviarNotificacaoWhatsApp(encomenda);
+
+        } catch (Exception e) {
+            response.put("success", false);
+            response.put("message", e.getMessage());
+        }
+        return response;
+    }
+
+    @PostMapping("/{id}/feedback")
+    public String registrarFeedback(@PathVariable Integer id,
+                                    @RequestParam Integer pontuacao,
+                                    @RequestParam String comentario,
+                                    RedirectAttributes redirectAttributes) {
+        try {
+            encomendaService.registrarFeedback(id, pontuacao, comentario);
+            redirectAttributes.addFlashAttribute("message", "Feedback registrado com sucesso!");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", e.getMessage());
+        }
+        return "redirect:/encomenda";
+    }
+
+    @GetMapping("/rastrear/{codigoRastreio}")
+    public String rastrearEncomenda(@PathVariable String codigoRastreio, Model model) {;
+        List<Encomenda> encomendas = encomendaRepository.findByCodigoRastreio(codigoRastreio);
+        if (encomendas.isEmpty()) {
+            model.addAttribute("error", "Código de rastreio não encontrado");
+        } else {
+            model.addAttribute("encomenda", encomendas.get(0));
+        }
+        return "encomenda/rastreio";
+    }
+
+    private void enviarNotificacaoWhatsApp(Encomenda encomenda) {
+        System.out.println("WhatsApp: Encomenda " + encomenda.getCodigoRastreio() + " está chegando!");
     }
 }

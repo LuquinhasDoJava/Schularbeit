@@ -49,7 +49,7 @@ public class CaminhaoController {
             dto = caminhaoMapper.toAtualizacaoDto(caminhao);
         } else {
             // criação: DTO vazio - use null para campos Double
-            dto = new AtualizacaoCaminhao(null, " ", null, " ", null, null, null, null, null);
+            dto = new AtualizacaoCaminhao(null, " ", null, " ", null, null, null, null, null,null,null,null);
         }
         model.addAttribute("caminhao", dto);
         model.addAttribute("marcas", marcaService.procurarTodos());
@@ -120,6 +120,53 @@ public class CaminhaoController {
 		}
 		return "redirect:/caminhao";
 	}
-	
+
+
+    @PostMapping("/{id}/quilometragem")
+    public String registrarQuilometragem(@PathVariable Long id,
+                                         @RequestParam double quilometragem,
+                                         RedirectAttributes redirectAttributes) {
+        try {
+            caminhaoService.registrarQuilometragem(id, quilometragem);
+            redirectAttributes.addFlashAttribute("message", "Quilometragem atualizada com sucesso!");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", e.getMessage());
+        }
+        return "redirect:/caminhao";
+    }
+
+    @PostMapping("/{id}/manutencao-rotina")
+    public String realizarManutencaoRotina(@PathVariable Long id,
+                                           @RequestParam String descricao,
+                                           @RequestParam double custo,
+                                           RedirectAttributes redirectAttributes) {
+        try {
+            caminhaoService.realizarManutencaoRotina(id, descricao, custo);
+            redirectAttributes.addFlashAttribute("message", "Manutenção de rotina realizada com sucesso!");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", e.getMessage());
+        }
+        return "redirect:/caminhao";
+    }
+
+    @PostMapping("/{id}/troca-pneus")
+    public String realizarTrocaPneus(@PathVariable Long id,
+                                     @RequestParam String descricao,
+                                     @RequestParam double custo,
+                                     RedirectAttributes redirectAttributes) {
+        try {
+            caminhaoService.realizarTrocaPneus(id, descricao, custo);
+            redirectAttributes.addFlashAttribute("message", "Troca de pneus realizada com sucesso!");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", e.getMessage());
+        }
+        return "redirect:/caminhao";
+    }
+
+    @GetMapping("/manutencao")
+    public String listarPrecisandoManutencao(Model model) {
+        model.addAttribute("caminhoes", caminhaoService.procurarPrecisandoManutencao());
+        return "caminhao/manutencao-list";
+    }
 	
 }

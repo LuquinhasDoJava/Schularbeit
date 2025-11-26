@@ -4,12 +4,16 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import java.math.BigDecimal;
+import java.time.LocalTime;
 
 public record AtualizacaoEncomenda(
         Integer id,
 
         @NotNull(message = "Produto é obrigatório")
         Integer produtoId,
+
+        @NotBlank(message = "Origem é obrigatória")
+        String origem,
 
         @NotBlank(message = "Destino é obrigatório")
         String destino,
@@ -20,5 +24,13 @@ public record AtualizacaoEncomenda(
 
         @NotNull(message = "Preço é obrigatório")
         @Positive(message = "Preço deve ser positivo")
-        BigDecimal preco
+        BigDecimal preco,
+
+        // NOVOS CAMPOS
+        @NotNull(message = "Horário de coleta é obrigatório")
+        LocalTime horarioColeta,
+
+        Long caminhaoId, // Opcional - para designar caminhão
+
+        String statusEntrega // Para atualizar status
 ) {}
