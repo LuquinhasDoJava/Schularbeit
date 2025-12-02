@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang ="en" xmlns:th="http://thymeleaf.org" >
+
+<head th:replace="~{fragmentos/head :: head('Manter Produto')}"></head>
+<body>
+	<header
+		th:replace="~{fragmentos/header :: header(activePage='Produto')}"></header>
+	<div class="container-fluid" style="max-width: 900px; margin: 0 auto;">
+		<h2 class="text-center"
+			th:text="(${produto != null} ? 'Editar Produto' : 'Novo Produto')"></h2>
+		<div th:if="${message != null}"
+			class="alert alert-success alert-dismissible fade show text-center"
+			role="alert">
+			[[${message}]]
+			<button type="button" class="close btn-sm" data-dismiss="alert"
+				aria-label="Close">
+				<span aria-hidden="true">&times;</span>
+			</button>
+		</div>
+		<div layout:fragment="header">
+			<div class="box">
+				<form method="post" action="/produto">
+					<input type="hidden" name="_method" value="put" th:if="${produto!= null}">
+					<input type="hidden" name="id" th:value="${produto?.id}">
+					
+					<div class="form-group">
+						<label for="nome"> Nome: </label>
+						<input class="form-control" type="text" id="nome" name="nome" th:value="${produto?.nome}">
+					</div>
+					
+					<div class="form-group">
+						<label for="peso"> Peso: </label>
+						<input class="form-control" step="0.01" type="number" id="peso" name="peso" th:value="${produto?.peso}">
+					</div>
+					
+					<div class="form-group">
+						<label for="peso"> Preço: </label>
+						<input class="form-control" step="0.01" type="number" id="preco" name="preco" th:value="${produto?.preco}">
+					</div>
+					
+					<input class="btn btn-secondary" type="submit" value="Cadastrar">
+				</form>
+			</div>
+		</div>
+</body>
+</html>

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang ="en" xmlns:th="http://thymeleaf.org" >
+
+<head th:replace="~{fragmentos/head :: head('Listagem Caixa')}"></head>
+<body>
+<div layout:fragment="header">
+<header th:replace="~{fragmentos/header :: header(activePage='Caixa')}"></header>
+	<div class="container-fluid" style="max-width: 900px; margin: 0 auto;">
+		<h2 class="text-center"
+			th:text="${caixa!= null} ? 'Editar Caixa' : 'Lista Caixa'"></h2>
+		<div th:if="${message != null}"
+			class="alert alert-success alert-dismissible fade show text-center"
+			role="alert">
+			[[${message}]]
+			<button type="button" class="close btn-sm" data-dismiss="alert"
+				aria-label="Close">
+				<span aria-hidden="true">&times;</span>
+			</button>
+		</div>
+	<div class="box">
+		<form method="post" action="/caixa">
+			<input type="hidden" name="_method" value="put" th:if="${caixa != null}">
+			<input type="hidden" name="id" th:value="${caixa?.id}">
+			
+			<div class="form-group">
+				<label for="altura"> Altura: </label>
+				<input class="form-control" type="number" step="0.01" id="altura" name="altura" th:value="${caixa?.altura}">
+			</div>
+			<div class="form-group">
+				<label for="largura"> Largura: </label>
+				<input class="form-control" type="number" step="0.01" id="largura" name="largura" th:value="${caixa?.largura}">
+			<div class="form-group">
+				<label for="comprimento"> Comprimento: </label>
+				<input class="form-control" type="number" step="0.01" id="comprimento" name="comprimento" th:value="${caixa?.comprimento}">
+			</div>
+			<div class="form-group">
+				<label for="materia"> Material: </label>
+				<input class="form-control" type="text" id="material" name="material" th:value="${caixa?.material}">
+			</div>
+			<div class="form-group">
+				<label for="limitePeso"> Limite do Peso: </label>
+				<input class="form-control" type="number" step="0.01" id="limitePeso" name="limitePeso" th:value="${caixa?.limitePeso}">
+			</div>
+			<input type="submit" class="btn btn-secondary" value="Cadastrar">
+		</form>
+	</div>
+	</div>
+</body>
+</html>

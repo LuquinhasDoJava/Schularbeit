@@ -1,0 +1,39 @@
+Saida API Geolocalização
+Essa daqui retorna as coordenadas baseadas em um CEP
+
+{
+    "items": [
+        {
+            "title": "03818-020, Ermelino Matarazzo, São Paulo, SP, Brasil",
+            "id": "here:cm:namedplace:24315087",
+            "resultType": "locality",
+            "localityType": "postalCode",
+            "address": {
+                "label": "03818-020, Ermelino Matarazzo, São Paulo, SP, Brasil",
+                "countryCode": "BRA",
+                "countryName": "Brasil",
+                "stateCode": "SP",
+                "state": "São Paulo",
+                "city": "São Paulo",
+                "district": "Ermelino Matarazzo",
+                "postalCode": "03818-020"
+            },
+            "position": {
+                "lat": -23.49574,
+                "lng": -46.49329
+            },
+            "mapView": {
+                "west": -46.49564,
+                "south": -23.49889,
+                "east": -46.49128,
+                "north": -23.49267
+            },
+            "scoring": {
+                "queryScore": 1.0,
+                "fieldScore": {
+                    "postalCode": 1.0
+                }
+            }
+        }
+    ]
+}
