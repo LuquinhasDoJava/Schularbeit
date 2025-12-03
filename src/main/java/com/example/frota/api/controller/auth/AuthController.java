@@ -1,14 +1,17 @@
 package com.example.frota.api.controller.auth;
 
+import com.example.frota.application.dto.user.AuthRequest;
+import com.example.frota.application.dto.user.AuthResponse;
+import com.example.frota.domain.user.model.User;
+import com.example.frota.domain.user.repository.UserRepository;
+import com.example.frota.infrastructure.security.JwtService;
+
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
-
-import com.example.frota.application.dto.user.AuthRequest;
-import com.example.frota.domain.user.model.User;
-import com.example.frota.domain.user.repository.UserRepository;
 
 @RestController
 @RequestMapping("/auth")
@@ -23,53 +26,97 @@ public class AuthController {
     @Autowired
     private JwtService jwtService;
 
-    @Autowired
-    private AuthenticationManager authenticationManager; 
 
-    /**
-     * Endpoint para Registro de Novos Usuários.
-     * Recebe um AuthRequest e cria um novo User no banco.
-     */
     @PostMapping("/register")
-    public ResponseEntity<?> registerUser(@Valid @RequestBody User userRequest) {
-        // Validação de unicidade 
-        if (userRepository.existsById(userRequest.getId())) {
-            return new ResponseEntity<>("Id já está em uso!", HttpStatus.BAD_REQUEST);
+    public ResponseEntity<?> registerUser(@Valid @RequestBody AuthRequest authRequest) {
+        boolean validaEmail = userRepository.findAll().stream()
+            .anyMatch(u -> u.getEmail().equals(authRequest.email()));
+            
+        if (validaEmail) {
+            return ResponseEntity.badRequest()
+                .body("{\"erro\": \"Email já está em uso!\"}");
         }
-
-        // Criptografa a senha antes de salvar
-        userRequest.setPassword(passwordEncoder.encode(userRequest.getSenha()));
         
-        // Salva o novo usuário
-        User savedUser = userRepository.save(userRequest);
-        
-        // Opcional: Gera o token e retorna para o cliente para ele já estar logado
-        UserDetails userDetails = savedUser; // Usando o User como UserDetails (ajuste se necessário)
-        String token = jwtService.generateToken(userDetails);
-        
-        return new ResponseEntity<>(new AuthResponse(token), HttpStatus.CREATED);
-    }
-
-    /**
-     * Endpoint para Login e Geração de Token JWT.
-     * Recebe um AuthRequest e autentica as credenciais.
-     */
-    @PostMapping("/login")
-    public ResponseEntity<?> authenticateAndGetToken(@Valid @RequestBody AuthRequest authRequest) {
-        
-        // Tenta autenticar o usuário usando o AuthenticationManager do Spring Security
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(authRequest.nome(), authRequest.senha())
+        User novoUser = new User(
+            authRequest.nome(),
+            authRequest.email(),
+            passwordEncoder.encode(authRequest.senha()),
+            "ROLE_USER"
         );
         
-        // Se a autenticação for bem-sucedida
-        if (authentication.isAuthenticated()) {
-            // Gera o token JWT para o usuário autenticado
-            String token = jwtService.generateToken((UserDetails) authentication.getPrincipal());
-            return ResponseEntity.ok(new AuthResponse(token));
+        User userSalvo = userRepository.save(novoUser);
+        
+        String token = jwtService.gerarToken(
+            userSalvo.getEmail(),
+            userSalvo.getRole(),
+            userSalvo.getId(),
+            userSalvo.getNome()
+        );
+        
+        return ResponseEntity.status(HttpStatus.CREATED)
+            .body(AuthResponse.loginSuccess(
+                userSalvo.getId(),
+                userSalvo.getNome(),
+                userSalvo.getEmail(),
+                token,
+                userSalvo.getRole()
+            ));
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<?> authenticateAndGetToken(@Valid @RequestBody AuthRequest authRequest) {
+        try {
+            User user = userRepository.findAll().stream()
+                .filter(u -> u.getEmail().equals(authRequest.email()))
+                .findFirst()
+                .orElse(null);
+                
+            if (user == null) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body("{\"erro\": \"Email não encontrado\"}");
+            }
+            
+            if (!passwordEncoder.matches(authRequest.senha(), user.getSenha())) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body("{\"erro\": \"Senha incorreta\"}");
+            }
+            
+            String token = jwtService.gerarToken(
+                user.getEmail(),
+                user.getRole(),
+                user.getId(),
+                user.getNome()
+            );
+            
+            return ResponseEntity.ok(AuthResponse.loginSuccess(
+                user.getId(),
+                user.getNome(),
+                user.getEmail(),
+                token,
+                user.getRole()
+            ));
+            
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body("{\"erro\": \"Erro no servidor: " + e.getMessage() + "\"}");
+        }
+    }
+    
+    @GetMapping("/validate")
+    public ResponseEntity<?> validaToken(@RequestHeader("Authorization") String authHeader) {
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            return ResponseEntity.badRequest()
+                .body("{\"erro\": \"Token não fornecido\"}");
+        }
+        
+        String token = authHeader.substring(7);
+        boolean valida = jwtService.validarToken(token);
+        
+        if (valida) {
+            return ResponseEntity.ok("{\"mensagem\": \"Token válido\"}");
         } else {
-            // Se a autenticação falhar
-            return new ResponseEntity<>("Credenciais inválidas", HttpStatus.UNAUTHORIZED);
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                .body("{\"erro\": \"Token inválido ou expirado\"}");
         }
     }
 }
