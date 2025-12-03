@@ -41,11 +41,11 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         try {
             final String jwt = authHeader.substring(7);
             
-            if (jwtService.validateTokenStructure(jwt)) {
-                final String userEmail = jwtService.extractUsername(jwt);
+            if (jwtService.validarToken(jwt)) {
+                final String userEmail = jwtService.extrairUsername(jwt);
                 
                 if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-                    String role = jwtService.extractRole(jwt);
+                    String role = jwtService.extrairRole(jwt);
                     
                     List<GrantedAuthority> authorities = new ArrayList<>();
                     

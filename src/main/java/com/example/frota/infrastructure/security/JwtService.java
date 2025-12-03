@@ -17,36 +17,36 @@ import java.util.function.Function;
 @Service
 public class JwtService {
 
-    @Value("${jwt.secret.key}")
-    private String SECRET_KEY;
+    @Value("${jwt.chave}")
+    private String CHAVE_JWT;
     
-    @Value("${jwt.expiration.time:86400000}")
-    private long expirationTime;
+    @Value("${jwt.tempo:86400000}")
+    private long tempoExpirar;
 
-    public String extractUsername(String token) {
-        return extractClaim(token, Claims::getSubject);
+    public String extrairUsername(String token) {
+        return extrairClaim(token, Claims::getSubject);
     }
 
-    public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
-        final Claims claims = extractAllClaims(token);
-        return claimsResolver.apply(claims);
+    public <T> T extrairClaim(String token, Function<Claims, T> resolvedorClaims) {
+        final Claims claims = extrairTodosClaims(token);
+        return resolvedorClaims.apply(claims);
     }
 
-    public String extractRole(String token) {
-        return extractClaim(token, claims -> claims.get("role", String.class));
+    public String extrairRole(String token) {
+        return extrairClaim(token, claims -> claims.get("role", String.class));
     }
 
-    public String extractNome(String token) {
-        return extractClaim(token, claims -> claims.get("nome", String.class));
+    public String extrairNome(String token) {
+        return extrairClaim(token, claims -> claims.get("nome", String.class));
     }
 
-    public Long extractUserId(String token) {
-        return extractClaim(token, claims -> claims.get("id", Long.class));
+    public Long extrairUserId(String token) {
+        return extrairClaim(token, claims -> claims.get("id", Long.class));
     }
 
-    public String generateToken(String email, String role, Long userId, String nome) {
+    public String gerarToken(String email, String role, Long id, String nome) {
         Map<String, Object> claims = new HashMap<>();
-        claims.put("id", userId);
+        claims.put("id", id);
         claims.put("nome", nome);
         claims.put("role", role);
         
@@ -54,15 +54,15 @@ public class JwtService {
                 .setClaims(claims)
                 .setSubject(email)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + expirationTime))
-                .signWith(getSignInKey(), SignatureAlgorithm.HS256)
+                .setExpiration(new Date(System.currentTimeMillis() + tempoExpirar))
+                .signWith(getChave(), SignatureAlgorithm.HS256)
                 .compact();
     }
 
-    public boolean validateTokenStructure(String token) {
+    public boolean validarToken(String token) {
         try {
             Jwts.parserBuilder()
-                .setSigningKey(getSignInKey())
+                .setSigningKey(getChave())
                 .build()
                 .parseClaimsJws(token);
             return true;
@@ -71,24 +71,24 @@ public class JwtService {
         }
     }
 
-    public boolean isTokenExpired(String token) {
-        return extractExpiration(token).before(new Date());
+    public boolean validarTokenExpirado(String token) {
+        return extrairTempoExpiracao(token).before(new Date());
     }
 
-    private Date extractExpiration(String token) {
-        return extractClaim(token, Claims::getExpiration);
+    private Date extrairTempoExpiracao(String token) {
+        return extrairClaim(token, Claims::getExpiration);
     }
 
-    private Claims extractAllClaims(String token) {
+    private Claims extrairTodosClaims(String token) {
         return Jwts.parserBuilder()
-                .setSigningKey(getSignInKey())
+                .setSigningKey(getChave())
                 .build()
                 .parseClaimsJws(token)
                 .getBody();
     }
 
-    private Key getSignInKey() {
-        byte[] keyBytes = Decoders.BASE64.decode(SECRET_KEY);
+    private Key getChave() {
+        byte[] keyBytes = Decoders.BASE64.decode(CHAVE_JWT);
         return Keys.hmacShaKeyFor(keyBytes);
     }
 }
