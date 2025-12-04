@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org">
+<head th:replace="~{fragmentos/head :: head('Cadastro de Produto')}"></head>
+<body>
+<header th:replace="~{fragmentos/header :: header(activePage='produto')}"></header>
+
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title mb-0">
+                        <i class="fas fa-cube me-2"></i>
+                        <span th:text="${produto?.id != null} ? 'Editar Produto' : 'Cadastrar Produto'"></span>
+                    </h3>
+                </div>
+                <div class="card-body">
+
+                    <!-- Mensagens -->
+                    <div th:if="${message}" class="alert alert-success alert-dismissible fade show" role="alert">
+                        <span th:text="${message}"></span>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                    <div th:if="${error}" class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <span th:text="${error}"></span>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+
+                    <form method="post" th:action="@{/produto/salvar}">
+                        <input type="hidden" th:if="${produto?.id != null}" name="id" th:value="${produto?.id}">
+                        <input type="hidden" name="id" th:value="${produto?.id}">
+
+                        <div class="mb-3">
+                            <label for="caixaId" class="form-label">Caixa *</label>
+                            <select class="form-select" id="caixaId" name="caixaId" required>
+                                <option value="">Selecione uma caixa</option>
+                                <option th:each="caixa : ${caixas}"
+                                        th:value="${caixa.id}"
+                                        th:text="'Caixa #' + ${caixa.id} + ' - ' + ${caixa.altura} + 'x' + ${caixa.largura} + 'x' + ${caixa.comprimento} + 'cm'"
+                                        th:selected="${produto?.caixaId == caixa.id}">
+                                </option>
+                            </select>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="largura" class="form-label">Largura *</label>
+                                <input type="number" step="0.01" class="form-control" id="largura" name="largura"
+                                       th:value="${produto?.largura}" min="0.01" required>
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label for="altura" class="form-label">Altura *</label>
+                                <input type="number" step="0.01" class="form-control" id="altura" name="altura"
+                                       th:value="${produto?.altura}" min="0.01" required>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="comprimento" class="form-label">Comprimento *</label>
+                                <input type="number" step="0.01" class="form-control" id="comprimento" name="comprimento"
+                                       th:value="${produto?.comprimento}" min="0.01" required>
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label for="peso" class="form-label">Peso (kg) *</label>
+                                <input type="number" step="0.01" class="form-control" id="peso" name="peso"
+                                       th:value="${produto?.peso}" min="0.01" required>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="destino" class="form-label">Destino *</label>
+                            <input type="text" class="form-control" id="destino" name="destino"
+                                   th:value="${produto?.destino}" required
+                                   placeholder="Ex: São Paulo, SP">
+                            <div class="form-text">Cidade e estado para onde o produto será enviado</div>
+                        </div>
+
+                        <div class="d-flex gap-2">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save me-1"></i>
+                                <span th:text="${produto?.id != null} ? 'Atualizar' : 'Cadastrar'"></span>
+                            </button>
+                            <a th:href="@{/produto}" class="btn btn-secondary">
+                                <i class="fas fa-times me-1"></i>Cancelar
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer th:replace="~{fragmentos/footer :: footer}"></footer>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
